@@ -30,4 +30,17 @@ describe('LoginComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should store the token in sessionStorage after successful login', () => {
+    // GIVEN - formulaire valide
+    component.loginForm.setValue({
+      login: 'pmj.bailly',
+      password: 'pmjbailly13122'
+    });
+    // WHEN
+    component.onSubmit();
+    // THEN - le mock renvoie { token: 'mock-token' }
+    expect(sessionStorage.getItem('token')).toBe('mock-token');
+    expect(component.isAuthenticated).toBe(true);
+  });
 });

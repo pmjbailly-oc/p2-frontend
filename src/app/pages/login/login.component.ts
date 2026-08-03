@@ -1,7 +1,7 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MaterialModule } from '../../shared/material.module';
 import { UserService } from '../../core/service/user.service';
 import { Login } from '../../core/models/Login';
@@ -18,6 +18,7 @@ export class LoginComponent implements OnInit {
   private userService = inject(UserService);
   private formBuilder = inject(FormBuilder);
   private destroyRef = inject(DestroyRef);
+  private router = inject(Router);
   loginForm: FormGroup = new FormGroup({});
   submitted: boolean = false;
   isLoading: boolean = false;
@@ -52,9 +53,12 @@ export class LoginComponent implements OnInit {
     this.userService.login(login)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: () => {
+        next: (response) => {
           this.isLoading = false;
           this.isAuthenticated = true;
+          const token = (response as { token: string }).token;
+          sessionStorage.setItem('token', token);
+          this.router.navigate(['/students']);
         },
         error: (err) => {
           this.isLoading = false;
