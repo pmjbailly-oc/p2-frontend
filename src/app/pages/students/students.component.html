@@ -1,0 +1,45 @@
+<div class="card m-3">
+  <h5 class="card-header">Students List</h5>
+  <div class="card-body">
+    <div class="mb-2">
+      <a class="btn btn-primary" routerLink="/students/add">Add Student</a>
+    </div>
+
+    @if (isLoading) {
+      <div class="alert alert-info">Chargement des étudiants...</div>
+    }
+
+    @if (errorMessage) {
+      <div class="alert alert-danger">{{ errorMessage }}</div>
+    }
+
+    @if (!isLoading && students.length === 0) {
+      <div class="alert alert-warning">Aucun étudiant enregistré.</div>
+    }
+
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (student of students; track student.id) {
+          <tr>
+            <td>{{ student.firstName }}</td>
+            <td>{{ student.lastName }}</td>
+            <td>{{ student.email }}</td>
+            <td>
+              <a class="btn btn-info mr-1" [routerLink]="['/students', student.id]">Detail</a>
+              <a class="btn btn-warning mr-1" [routerLink]="['/students', student.id, 'edit']">Edit</a>
+              <button class="btn btn-danger" (click)="deleteStudent(student.id)">Delete</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
