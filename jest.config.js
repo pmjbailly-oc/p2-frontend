@@ -5,5 +5,13 @@ module.exports = {
   testMatch: ['**/+(*.)+(spec).+(ts|js)'],
   setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'],
   collectCoverage: true,
-  coverageReporters: ['html'],
+  coverageReporters: ['html', 'text'],
+  coverageThreshold: {
+    global: {
+      statements: 80,
+      functions: 60,
+      lines: 80,
+      branches: 30
+    }
+  },
 };
