@@ -10,7 +10,7 @@ describe('Login', () => {
     // WHEN - soumission du formulaire de connexion
     cy.visit('/login');
     cy.get('input[formControlName="login"]').type('pmj.bailly');
-    cy.get('input[formControlName="password"]').type('pmjbailly13122');
+    cy.get('input[formControlName="password"]').type('pmjbailly97643!');
     cy.get('button.btn-primary').click();
 
     // THEN - l'API est appelée et le token stocké
