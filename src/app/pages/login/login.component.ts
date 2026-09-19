@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit {
           this.isLoading = false;
           this.isAuthenticated = true;
           const token = (response as { token: string }).token;
-          sessionStorage.setItem('token', token);
+          this.userService.setToken(token);
           this.router.navigate(['/students']);
         },
         error: (err) => {

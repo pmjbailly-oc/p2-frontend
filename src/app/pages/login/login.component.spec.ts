@@ -11,7 +11,7 @@ describe('LoginComponent', () => {
   let fixture: ComponentFixture<LoginComponent>;
 
   beforeEach(async () => {
-    sessionStorage.clear();
+    localStorage.clear();
     await TestBed.configureTestingModule({
       imports: [LoginComponent],
       providers: [
@@ -27,20 +27,24 @@ describe('LoginComponent', () => {
     fixture.detectChanges();
   });
 
+  afterEach(() => {
+    localStorage.clear();
+  });
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should store the token in sessionStorage after successful login', () => {
+  it('should store the token in localStorage after successful login', () => {
     // GIVEN - formulaire valide
     component.loginForm.setValue({
       login: 'pmj.bailly',
-      password: 'pmjbailly13122'
+      password: 'pmjbailly97643!'
     });
     // WHEN
     component.onSubmit();
     // THEN - le mock renvoie { token: 'mock-token' }
-    expect(sessionStorage.getItem('token')).toBe('mock-token');
+    expect(localStorage.getItem('token')).toBe('mock-token');
     expect(component.isAuthenticated).toBe(true);
   });
 });

@@ -1,59 +1,66 @@
 # EtudiantFrontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.16.
+Frontend Angular 19 de l'application de gestion des étudiants de la bibliothèque.
+
+## Pré-requis
+
+- Node.js et npm
+- Le backend doit tourner sur `http://localhost:8080` (voir README du back-end)
 
 ## Development server
 
-To start a local development server, run:
+Pour démarrer le serveur de développement :
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Ouvrir ensuite `http://localhost:4200/`. Les appels à `/api/**` sont proxifiés vers le backend sur le port 8080 via `proxy.conf.json`.
 
-## Code scaffolding
+## Authentification
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
+- L'utilisateur non connecté est redirigé vers la route `/login` s'il tente d'accéder aux pages protégées (`AuthGuard`).
+- Une fois connecté, les routes `/login` et `/register` ne sont plus accessibles : l'utilisateur est redirigé vers `/students`.
+- Le token JWT est stocké dans le `localStorage` sous la clé `token` et envoyé automatiquement par l'intercepteur HTTP.
+- L'état de connexion est exposé par `UserService.isLoggedIn$`.
 
 ## Building
-
-To build the project run:
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Les artefacts sont générés dans le dossier `dist/`.
 
 ## Running unit tests
 
-To execute unit tests with the [Jest](https://jestjs.io/) test runner, use the following command:
+Les tests unitaires utilisent [Jest](https://jestjs.io/) (pas la commande `ng test`, qui n'est pas configurée) :
 
 ```bash
-jest
+npm test
+```
+
+Pour lancer les tests en mode watch :
+
+```bash
+npm run test:watch
 ```
 
 ## Running end-to-end tests
 
-For end-to-end (e2e) testing, run:
+Les tests E2E utilisent [Cypress](https://www.cypress.io/). Il faut d'abord que le serveur de développement tourne, car Cypress attend `http://localhost:4200` comme baseUrl :
 
 ```bash
-ng e2e
+# Terminal 1
+ng serve
+
+# Terminal 2 (une fois ng serve démarré)
+npx cypress run --headless    # exécution headless
+npx cypress open              # mode interactif
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Les scénarios couverts : login, protection des routes, liste des étudiants, formulaire étudiant.
 
 ## Additional Resources
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+For more information on using the Angular CLI, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
