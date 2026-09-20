@@ -15,7 +15,7 @@ describe('Login', () => {
 
     // THEN - l'API est appelée et le token stocké
     cy.wait('@loginRequest');
-    cy.window().its('sessionStorage.token').should('eq', 'fake-token');
+    cy.window().its('localStorage.token').should('eq', 'fake-token');
 
     // THEN - redirection vers /students (la liste est mockée à son tour)
     cy.intercept('GET', '/api/students', {

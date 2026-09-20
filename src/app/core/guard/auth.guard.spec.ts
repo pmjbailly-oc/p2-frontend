@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { AuthGuard } from './auth.guard';
-import { provideRouter, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, provideRouter, Router, RouterStateSnapshot } from '@angular/router';
 
 describe('AuthGuard', () => {
   let guard: AuthGuard;
@@ -27,11 +27,19 @@ describe('AuthGuard', () => {
     expect(guard).toBeTruthy();
   });
 
+  function stateFor(url: string): RouterStateSnapshot {
+    return { url } as unknown as RouterStateSnapshot;
+  }
+
+  function routeSnapshot(): ActivatedRouteSnapshot {
+    return {} as unknown as ActivatedRouteSnapshot;
+  }
+
   it('should return true when a token is present', () => {
     // GIVEN
     localStorage.setItem('token', 'fake-token');
     // WHEN
-    const result = guard.canActivate();
+    const result = guard.canActivate(routeSnapshot(), stateFor('/students'));
     // THEN
     expect(result).toBe(true);
   });
@@ -39,42 +47,34 @@ describe('AuthGuard', () => {
   it('should return false when no token', () => {
     // GIVEN - pas de token
     // WHEN
-    const result = guard.canActivate();
+    const result = guard.canActivate(routeSnapshot(), stateFor('/students'));
     // THEN
-    expect(result).toBe(false);
+    expect(result.toString()).toBe('/login');
   });
 
   it('should block access to a protected route and redirect to /login when no token', () => {
     // GIVEN - pas de token
-    const navigateSpy = jest.spyOn(router, 'navigate');
     // WHEN
-    const result = guard.canActivate();
+    const result = guard.canActivate(routeSnapshot(), stateFor('/students'));
     // THEN
-    expect(result).toBe(false);
-    expect(navigateSpy).toHaveBeenCalledWith(['/login']);
+    expect(result.toString()).toBe('/login');
   });
 
   it('should redirect a logged-in user away from /login', () => {
     // GIVEN
     localStorage.setItem('token', 'fake-token');
-    Object.defineProperty(router, 'url', { value: '/login', configurable: true });
-    const navigateSpy = jest.spyOn(router, 'navigate');
     // WHEN
-    const result = guard.canActivate();
+    const result = guard.canActivate(routeSnapshot(), stateFor('/login'));
     // THEN
-    expect(result).toBe(false);
-    expect(navigateSpy).toHaveBeenCalledWith(['/students']);
+    expect(result.toString()).toBe('/students');
   });
 
   it('should redirect a logged-in user away from /register', () => {
     // GIVEN
     localStorage.setItem('token', 'fake-token');
-    Object.defineProperty(router, 'url', { value: '/register', configurable: true });
-    const navigateSpy = jest.spyOn(router, 'navigate');
     // WHEN
-    const result = guard.canActivate();
+    const result = guard.canActivate(routeSnapshot(), stateFor('/register'));
     // THEN
-    expect(result).toBe(false);
-    expect(navigateSpy).toHaveBeenCalledWith(['/students']);
+    expect(result.toString()).toBe('/students');
   });
 });
