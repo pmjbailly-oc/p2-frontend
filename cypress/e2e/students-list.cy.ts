@@ -1,7 +1,7 @@
 describe('Students list', () => {
   beforeEach(() => {
     // Token factice pour passer le guard
-    sessionStorage.setItem('token', 'fake-token');
+    localStorage.setItem('token', 'fake-token');
     cy.intercept('GET', '/api/students', {
       statusCode: 200,
       body: [

@@ -1,7 +1,7 @@
 describe('Route protection', () => {
   it('redirects to /login when accessing /students without token', () => {
-    // GIVEN - pas de token en session
-    sessionStorage.clear();
+    // GIVEN - pas de token stocké
+    localStorage.clear();
 
     // WHEN - accès direct à une route protégée
     cy.visit('/students');
@@ -12,7 +12,7 @@ describe('Route protection', () => {
 
   it('redirects to /login when accessing /students/add without token', () => {
     // GIVEN
-    sessionStorage.clear();
+    localStorage.clear();
 
     // WHEN
     cy.visit('/students/add');
@@ -23,7 +23,7 @@ describe('Route protection', () => {
 
   it('allows access when a token is present', () => {
     // GIVEN
-    sessionStorage.setItem('token', 'fake-token');
+    localStorage.setItem('token', 'fake-token');
     cy.intercept('GET', '/api/students', {
       statusCode: 200,
       body: []

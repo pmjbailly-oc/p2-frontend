@@ -20,6 +20,7 @@ Ouvrir ensuite `http://localhost:4200/`. Les appels à `/api/**` sont proxifiés
 ## Authentification
 
 - L'utilisateur non connecté est redirigé vers la route `/login` s'il tente d'accéder aux pages protégées (`AuthGuard`).
+- Le guard évalue l'URL demandée (`state.url`) et retourne un `UrlTree` plutôt que de relancer une navigation, ce qui évite toute boucle de redirection.
 - Une fois connecté, les routes `/login` et `/register` ne sont plus accessibles : l'utilisateur est redirigé vers `/students`.
 - Le token JWT est stocké dans le `localStorage` sous la clé `token` et envoyé automatiquement par l'intercepteur HTTP.
 - L'état de connexion est exposé par `UserService.isLoggedIn$`.

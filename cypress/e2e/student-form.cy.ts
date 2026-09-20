@@ -9,7 +9,7 @@ describe('Student CRUD screens', () => {
   };
 
   beforeEach(() => {
-    sessionStorage.setItem('token', 'fake-token');
+    localStorage.setItem('token', 'fake-token');
     cy.intercept('GET', '/api/students', {
       statusCode: 200,
       body: [student]
